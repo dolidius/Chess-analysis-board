@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 98vh;
+    gap: 40px;
+}
+
+.menu {
+    width: 480px;
+    height: 850px;
+    background-color: orangered;
+}
