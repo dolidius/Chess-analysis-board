@@ -9,5 +9,39 @@
 .menu {
     width: 480px;
     height: 850px;
-    background-color: #CA972C;
+    background-color: #464146;
+}
+
+.loadPGN {
+    height: 10%;
+}
+
+.history {
+    /* margin-left: 10px; */
+    height: 90%;
+    overflow-y:scroll;
+    color: white;
+    font-size: 19px;
+    display: flex;
+    flex-wrap: wrap;
+    font-family: 'Raleway', sans-serif;
+}
+
+.moveNum {
+    flex-basis: 15%;
+    padding: 10px 0;
+    background-color: #201F20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top:1px solid grey;
+}
+
+.subAnalysis {
+    flex-basis: 100%;
+    display: flex;
+}
+
+.subAnalysisInside {
+    display: flex;
 }

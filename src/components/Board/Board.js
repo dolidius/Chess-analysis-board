@@ -7,9 +7,15 @@ import Chessboard from "chessboardjsx";
 const Chess = require("chess.js");
 
 
-const Board = ({ onMove, chess, fen }) => {
+const Board = ({ onMove, chess, currFen }) => {
 
     const [history, setHistory] = useState([]); // moves history
+
+    const [fen, setFen] = useState(currFen);
+
+    useEffect(() => {
+        setFen(currFen);
+    }, [currFen])
 
     const onDrop = ({sourceSquare, targetSquare}) => {
         
@@ -21,8 +27,6 @@ const Board = ({ onMove, chess, fen }) => {
 
         if (move === null) return;
 
-        console.log('siema');
-
         let history = chess.history({ verbose: true });
 
         history[history.length - 1].fen = chess.fen();
@@ -33,17 +37,14 @@ const Board = ({ onMove, chess, fen }) => {
 
     }
 
-    useEffect(() => {
-        console.log(history);
-    }, [history]);
-
     return (
-        <div key={fen}>
+        <div>
             <Chessboard 
                 id="board"
                 position={fen}
                 onDrop={onDrop}
                 width={850}
+                undo={true}
             />
         </div>
     );

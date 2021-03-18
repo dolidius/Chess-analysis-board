@@ -1,0 +1,13 @@
+.move {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-basis: calc(42.5% - 17px);
+    padding: 10px 0;
+    padding-left: 17px;
+    cursor: pointer;
+}
+
+.move:hover {
+    background-color: #2F2B2F;
+}
