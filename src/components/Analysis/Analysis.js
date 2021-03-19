@@ -40,14 +40,6 @@ const Analysis = () => {
     }, []);
 
     useEffect(() => {
-        // console.log(bestLines);
-    }, [bestLines])
-
-    useEffect(() => {
-        // console.log(bestMove);
-    }, [bestMove])
-
-    useEffect(() => {
         
         stockfish.postMessage("position fen " + fen);
         stockfish.postMessage(`go depth ${depth}`);
@@ -81,7 +73,6 @@ const Analysis = () => {
 
                 const bestLinesCopy = bestLines;
                 bestLinesCopy[index] = moves;
-                // console.log(moves)
                 setBestLines(bestLinesCopy);
 
             }
@@ -116,25 +107,28 @@ const Analysis = () => {
         }
     }
 
-
-    const moveHistoryPress = (piece, to, moveNum) => {
-
-        const parsed = pgnParser.parse(analysisPGN);
-
-        console.log(analysisPGN);
-        console.log(parsed);
-
+    const addHeadersToPGN = (headers) => {
         let newPgn = "";
-
-        const headers = parsed[0].headers;
-        const moves = parsed[0].history;
 
         headers.forEach(header => {
             newPgn += `[${header.name} \"${header.value}\"]\n`;
         });
 
         newPgn += "\n";
-        
+
+        return newPgn;
+    }
+
+
+    const moveHistoryPress = (piece, to, moveNum) => {
+
+        const parsed = pgnParser.parse(analysisPGN);
+
+        const headers = parsed[0].headers;
+        const moves = parsed[0].history;
+
+        let newPgn = addHeadersToPGN(headers);
+
         let moveNumber = 1;
         let numberTimes = 0;
         let add = false;
@@ -169,6 +163,97 @@ const Analysis = () => {
                 }
 
                 moveNumberOverall ++;
+            }
+
+        }
+
+        if (chess.load_pgn(newPgn)) {
+            setFen(chess.fen());
+        } else {
+            console.log("bugged");
+        }
+
+    }
+
+    const onSubAnalysisPress = (piece, to, moveNum, ravNumber) => {
+
+        const parsed = pgnParser.parse(analysisPGN);
+
+        const headers = parsed[0].headers;
+        let moves = parsed[0].history;
+
+        let newPgn = addHeadersToPGN(headers);
+
+        let moveNumber = 1;
+        let numberTimes = 0;
+        let add = false;
+        
+        for (let i = 0; i < ravNumber.length; i ++) {
+            let moveCounter = 0;
+            
+            for (let j = 0; j < moves.length; j ++) {
+
+                if (moves[j].piece != null) {
+                    
+                    moveCounter++;
+
+                    if (ravNumber[i] === moveCounter) {
+                        moves = moves[j].rav;
+
+                        if (i === ravNumber.length - 1) {
+                            //loop through last rav
+                            moveCounter = 0;
+                            for (let k = 0; k < moves.length; k ++) {
+                                if (moves[k].piece != null) {
+                                    moveCounter ++;
+                                    if (numberTimes === 0) {
+                                        newPgn += `${moveNumber}. `;
+                                        add = true;
+                                    }
+                    
+                                    if (numberTimes === 1) {
+                                        moveNumber ++;
+                                        numberTimes = 0;
+                                    }
+                    
+                                    if (add) {
+                                        numberTimes = 1;
+                                        add = false;
+                                    }
+
+                                    newPgn += `${moves[k].raw} `;
+
+                                    if (moveCounter === moveNum) {
+                                        break;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        break;
+                    }
+
+                    if (numberTimes === 0) {
+                        newPgn += `${moveNumber}. `;
+                        add = true;
+                    }
+    
+                    if (numberTimes === 1) {
+                        moveNumber ++;
+                        numberTimes = 0;
+                    }
+    
+                    if (add) {
+                        numberTimes = 1;
+                        add = false;
+                    }
+
+                    newPgn += `${moves[j].raw} `;
+
+                }
+
+
             }
 
         }
@@ -219,6 +304,7 @@ const Analysis = () => {
                         ravNumber={ravNumber}
                         raw={move.raw}
                         moveNumberOverall={moveNumberOverall}
+                        onSubAnalysisPress={onSubAnalysisPress}
                     />
                 )
 
@@ -260,7 +346,7 @@ const Analysis = () => {
                     />
                     <input type="submit" value="Load PGN" />
                 </form>
-                {/* <button onClick={() => setTest("siema")}>elo</button> */}
+                <button onClick={() => console.log(bestLines)}>elo</button>
 
                 <div className={styles.history}>
                     {analysisPGN !== '' &&
@@ -272,7 +358,7 @@ const Analysis = () => {
                                 if (numberTimes === 0) {
                                     returnedComp.push(
                                         <div className={styles.moveNum} key={moveNumber}>
-                                            {moveNumber}
+                                            {moveNumber}.
                                         </div>
                                     )
                                     add = true;
@@ -288,26 +374,24 @@ const Analysis = () => {
                                     add = false;
                                 }
 
-                                if (move.piece != null) {
-                                    returnedComp.push( 
-                                        <Move
-                                            key={moveNumber + move.piece + move.to}
-                                            onMoveClick={moveHistoryPress}
-                                            piece={move.piece}
-                                            to={move.to}
-                                            moveNum={moveNumberOverall}
-                                            raw={move.raw}
-                                        />
-                                    );
-
-                                    moveNumberOverall ++;
-                                }
+                                returnedComp.push( 
+                                    <Move
+                                        key={moveNumber + move.piece + move.to}
+                                        onMoveClick={moveHistoryPress}
+                                        piece={move.piece}
+                                        to={move.to}
+                                        moveNum={moveNumberOverall}
+                                        raw={move.raw}
+                                    />
+                                );
 
                                 if (move.rav) {
                                     //subanalysis
                                     const sub = loadSubAnalysis(move.rav, [moveNumberOverall]);
                                     returnedComp.push(<div className={styles.subAnalysis}>({sub})</div>);
                                 }
+
+                                moveNumberOverall ++;
 
                             }
                             return ( 

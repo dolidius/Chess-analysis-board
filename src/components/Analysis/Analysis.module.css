@@ -18,30 +18,34 @@
 
 .history {
     /* margin-left: 10px; */
-    height: 90%;
-    overflow-y:scroll;
+    display: flex;
+    flex-wrap:wrap;
+    /* height: 90%; */
     color: white;
     font-size: 19px;
-    display: flex;
-    flex-wrap: wrap;
     font-family: 'Raleway', sans-serif;
 }
 
 .moveNum {
-    flex-basis: 15%;
-    padding: 10px 0;
-    background-color: #201F20;
+    color: #918D8D;
+    padding: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top:1px solid grey;
 }
 
 .subAnalysis {
-    flex-basis: 100%;
+    width: 100%;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 3px;
+    margin: 5px 0;
+    background-color: rgba(52,48,52,0.5);
 }
 
 .subAnalysisInside {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
