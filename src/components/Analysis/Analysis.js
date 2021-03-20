@@ -197,12 +197,8 @@ const Analysis = () => {
         const headers = parsed[0].headers;
         let moves = parsed[0].history;
 
-        let newPgn = addHeadersToPGN(headers);
+        const parsedMoves = [];
 
-        let moveNumber = 1;
-        let numberTimes = 0;
-        let add = false;
-        
         for (let i = 0; i < ravNumber.length; i ++) {
             let moveCounter = 0;
             
@@ -219,24 +215,11 @@ const Analysis = () => {
                             //loop through last rav
                             moveCounter = 0;
                             for (let k = 0; k < moves.length; k ++) {
+
                                 if (moves[k].piece != null) {
                                     moveCounter ++;
-                                    if (numberTimes === 0) {
-                                        newPgn += `${moveNumber}. `;
-                                        add = true;
-                                    }
-                    
-                                    if (numberTimes === 1) {
-                                        moveNumber ++;
-                                        numberTimes = 0;
-                                    }
-                    
-                                    if (add) {
-                                        numberTimes = 1;
-                                        add = false;
-                                    }
 
-                                    newPgn += `${moves[k].raw} `;
+                                    parsedMoves.push(moves[k].raw);
 
                                     if (moveCounter === moveNum) {
                                         break;
@@ -249,29 +232,15 @@ const Analysis = () => {
                         break;
                     }
 
-                    if (numberTimes === 0) {
-                        newPgn += `${moveNumber}. `;
-                        add = true;
-                    }
-    
-                    if (numberTimes === 1) {
-                        moveNumber ++;
-                        numberTimes = 0;
-                    }
-    
-                    if (add) {
-                        numberTimes = 1;
-                        add = false;
-                    }
-
-                    newPgn += `${moves[j].raw} `;
+                    parsedMoves.push(moves[j].raw);
 
                 }
-
 
             }
 
         }
+
+        let newPgn = createPGN(headers, parsedMoves);
 
         if (chess.load_pgn(newPgn)) {
             setFen(chess.fen());
