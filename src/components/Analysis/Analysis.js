@@ -146,6 +146,8 @@ const Analysis = () => {
             newPgn += `${moves[i]} `;
 
         }
+
+        return newPgn;
         
     }
 
@@ -157,13 +159,9 @@ const Analysis = () => {
         const headers = parsed[0].headers;
         const moves = parsed[0].history;
 
-        let newPgn = addHeadersToPGN(headers);
-
-        let moveNumber = 1;
-        let numberTimes = 0;
-        let add = false;
-
         let moveNumberOverall = 1;
+
+        const parsedMoves = [];
 
         for (let i = 0; i < moves.length; i ++) {
             
@@ -171,22 +169,7 @@ const Analysis = () => {
                 
                 const move = moves[i];
 
-                if (numberTimes === 0) {
-                    newPgn += `${moveNumber}. `;
-                    add = true;
-                }
-
-                if (numberTimes === 1) {
-                    moveNumber ++;
-                    numberTimes = 0;
-                }
-
-                if (add) {
-                    numberTimes = 1;
-                    add = false;
-                }
-
-                newPgn += `${move.raw} `;
+                parsedMoves.push(move.raw);
 
                 if (moveNumberOverall === moveNum) {
                     break;
@@ -196,6 +179,8 @@ const Analysis = () => {
             }
 
         }
+
+        let newPgn = createPGN(headers, parsedMoves);
 
         if (chess.load_pgn(newPgn)) {
             setFen(chess.fen());
