@@ -1,20 +1,25 @@
-//refactoring::not working yet need to change some things
+import React, { useState, useEffect } from 'react';
 
-class Stockfish {
+const Chess = require("chess.js");
 
-    constructor(stockfish) {
-        this.stockfish = stockfish;
-    }
+const stockfish = new Worker("/stockfish.js");
 
-    startNewGame = () => {
-        this.stockfish.postMessage("uci");
-        this.stockfish.postMessage("ucinewgame");
-        this.stockfish.postMessage("setoption name MultiPV value 3"); 
-    }
-    
-    getBestLines = (fen, depth) => {
-        this.stockfish.postMessage("position fen " + fen);
-        this.stockfish.postMessage(`go depth ${depth}`);
+const Stockfish = ({ fen }) => {
+
+    const [depth, setDepth] = useState(10);
+    const [bestLines, setBestLines] = useState([]); // [0]-best, [1]-second best, [2]-third best
+    const [bestMove, setBestMove] = useState("");
+
+    useEffect(() => {
+        stockfish.postMessage("uci");
+        stockfish.postMessage("ucinewgame");
+        stockfish.postMessage("setoption name MultiPV value 3"); // best 3 lines
+    }, []);
+
+    useEffect(() => {
+        
+        stockfish.postMessage("position fen " + fen);
+        stockfish.postMessage(`go depth ${depth}`);
         // console.log("!NEW MESSAGE!")
         stockfish.onmessage = function(event) {
             // console.log(event.data ? event.data: event);
@@ -44,8 +49,7 @@ class Stockfish {
                 }
 
                 const bestLinesCopy = bestLines;
-                bestLinesCopy[index] = moves;
-                // console.log(moves)
+                bestLinesCopy[index] = convertStockfishLine(moves);
                 setBestLines(bestLinesCopy);
 
             }
@@ -55,7 +59,47 @@ class Stockfish {
                 setBestMove(message[1]);
             }
         };
-    } 
+
+    }, [fen]);
+
+    const convertStockfishLine = line => {
+        
+        const chess2 = new Chess(`${fen}`);
+
+        const convertedLine = [];
+
+        for (let i = 0; i < line.length; i ++) {
+
+            const move = line[i];
+
+            const from = move[0] + move[1];
+            const to = move[2] + move[3];
+
+            const piece = chess2.get(from).type;
+
+            let convertedMove = "";
+
+            if (piece === 'p') {
+                convertedMove += to;
+            } else {
+                convertedMove += piece.toUpperCase() + to;
+            }
+
+            convertedLine.push(convertedMove);
+
+            chess2.move(from+to, { sloppy: true });
+
+        }
+
+        return convertedLine;
+
+    }
+
+    return (
+        <div onClick={() => console.log(bestLines)}>
+            siema
+        </div>
+    )
 
 }
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Board from '../Board/Board';
 import Move from '../Move/Move';
 import SubAnalysisMove from '../SubAnalysisMove/SubAnalysisMove';
+import Stockfish from '../Stockfish/Stockfish';
 
 import styles from './Analysis.module.css';
 
@@ -10,8 +11,6 @@ import parser from '@chess-fu/pgn-parser'
 const pgnParser = new parser();
 
 const Chess = require("chess.js");
-
-const stockfish = new Worker("/stockfish.js");
 
 const Analysis = () => {
 
@@ -32,58 +31,6 @@ const Analysis = () => {
         chess.header('White', 'unknown')
         chess.header('Black', 'unknown')
     }, [chess])
-
-    useEffect(() => {
-        stockfish.postMessage("uci");
-        stockfish.postMessage("ucinewgame");
-        stockfish.postMessage("setoption name MultiPV value 3"); // best 3 lines
-    }, []);
-
-    useEffect(() => {
-        
-        stockfish.postMessage("position fen " + fen);
-        stockfish.postMessage(`go depth ${depth}`);
-        // console.log("!NEW MESSAGE!")
-        stockfish.onmessage = function(event) {
-            // console.log(event.data ? event.data: event);
-            if (event.data.startsWith(`info depth ${depth}`)) {
-                let message = event.data.split(' ');
-
-                let index = 0;
-                let movesIndex = 0;
-
-                let moves = [];
-
-                for (let i = 0; i < message.length; i ++) {
-                    if (message[i] === 'multipv') {
-                        index = parseInt(message[i + 1]) - 1;
-                    }
-
-                    if (message[i] === 'pv') {
-                        movesIndex = i + 1;
-                        break;
-                    }
-
-                }
-
-                for (let i = movesIndex; i < message.length; i ++) {
-                    if (message[i] === 'bmc') break;
-                    moves.push(message[i]);
-                }
-
-                const bestLinesCopy = bestLines;
-                bestLinesCopy[index] = convertStockfishLine(moves);
-                setBestLines(bestLinesCopy);
-
-            }
-
-            if (event.data.startsWith("bestmove")) {
-                let message = event.data.split(' ');
-                setBestMove(message[1]);
-            }
-        };
-
-    }, [fen])
 
     const onMove = (fen) => {
         setFen(fen);
@@ -307,39 +254,6 @@ const Analysis = () => {
 
     }
 
-    const convertStockfishLine = line => {
-        
-        const chess2 = new Chess(`${fen}`);
-
-        const convertedLine = [];
-
-        for (let i = 0; i < line.length; i ++) {
-
-            const move = line[i];
-
-            const from = move[0] + move[1];
-            const to = move[2] + move[3];
-
-            const piece = chess2.get(from).type;
-
-            let convertedMove = "";
-
-            if (piece === 'p') {
-                convertedMove += to;
-            } else {
-                convertedMove += piece.toUpperCase() + to;
-            }
-
-            convertedLine.push(convertedMove);
-
-            chess2.move(from+to, { sloppy: true });
-
-        }
-
-        return convertedLine;
-
-    }
-
     let moveNumber = 1;
     let numberTimes = 0;
     let add = false;
@@ -367,8 +281,7 @@ const Analysis = () => {
 
                 <div className={styles.bestLines}>
 
-                    {bestLines.map(bestLine => {
-                    })}
+                    <Stockfish fen={fen} />
 
                 </div>
 
