@@ -72,7 +72,7 @@ const Analysis = () => {
                 }
 
                 const bestLinesCopy = bestLines;
-                bestLinesCopy[index] = moves;
+                bestLinesCopy[index] = convertStockfishLine(moves);
                 setBestLines(bestLinesCopy);
 
             }
@@ -117,6 +117,36 @@ const Analysis = () => {
         newPgn += "\n";
 
         return newPgn;
+    }
+
+    const createPGN = (headers, moves) => {
+        let newPgn = addHeadersToPGN(headers);
+
+        let moveNumber = 1;
+        let numberTimes = 0;
+        let add = false;
+
+        for (let i = 0; i < moves.length; i ++) {
+            
+            if (numberTimes === 0) {
+                newPgn += `${moveNumber}. `;
+                add = true;
+            }
+
+            if (numberTimes === 1) {
+                moveNumber ++;
+                numberTimes = 0;
+            }
+
+            if (add) {
+                numberTimes = 1;
+                add = false;
+            }
+
+            newPgn += `${moves[i]} `;
+
+        }
+        
     }
 
 
@@ -323,6 +353,39 @@ const Analysis = () => {
 
     }
 
+    const convertStockfishLine = line => {
+        
+        const chess2 = new Chess(`${fen}`);
+
+        const convertedLine = [];
+
+        for (let i = 0; i < line.length; i ++) {
+
+            const move = line[i];
+
+            const from = move[0] + move[1];
+            const to = move[2] + move[3];
+
+            const piece = chess2.get(from).type;
+
+            let convertedMove = "";
+
+            if (piece === 'p') {
+                convertedMove += to;
+            } else {
+                convertedMove += piece.toUpperCase() + to;
+            }
+
+            convertedLine.push(convertedMove);
+
+            chess2.move(from+to, { sloppy: true });
+
+        }
+
+        return convertedLine;
+
+    }
+
     let moveNumber = 1;
     let numberTimes = 0;
     let add = false;
@@ -347,6 +410,13 @@ const Analysis = () => {
                     <input type="submit" value="Load PGN" />
                 </form>
                 <button onClick={() => console.log(bestLines)}>elo</button>
+
+                <div className={styles.bestLines}>
+
+                    {bestLines.map(bestLine => {
+                    })}
+
+                </div>
 
                 <div className={styles.history}>
                     {analysisPGN !== '' &&

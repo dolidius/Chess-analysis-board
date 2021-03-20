@@ -1,3 +1,8 @@
 .subMove {
+    cursor: pointer;
     padding: 3px;
+}
+
+.subMove:hover {
+    color:rgba(255,255,255,0.5);
 }
