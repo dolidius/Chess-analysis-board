@@ -7,17 +7,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+    }
 
 .box {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    width: 40%;
-    height: 85%;
+    background-color: #464146;
+    width: 30%;
+    height: 82%;
     border-radius: 10px;
     position: relative;
+    z-index: 1000;
 }
 
 .exit {
@@ -25,6 +26,7 @@
     right: 15px;
     top: 10px;
     font-size: 30px;
+    color: white;
 }
 
 .exit:hover {
@@ -34,14 +36,39 @@
 .loadPGN {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pgnArea {
+    background-color: #918B91;
+    border: 3px solid #363336;
     resize: none;
-    width: 500px;
-    height: 500px;
+    width: 340px;
+    height: 470px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    padding: 20px;
+    outline: none;
 }
 
+
 .pgnLoadBtn {
-    
+    margin-top: 20px;
+    padding: 15px 0;
+    width: 384px;
+    border: none;
+    background-color: #302C30;
+    color: white;
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif;
+    text-transform: uppercase;
+    text-decoration: none;
+    outline: none;
+    border: 1px solid #1E1B1E;
+}
+
+.pgnLoadBtn:hover {
+    cursor: pointer;
+    background-color: #1E1B1E;
 }

@@ -5,7 +5,7 @@ import styles from './MenuButtons.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faCog, faSync } from "@fortawesome/free-solid-svg-icons";
 
-const MenuButtons = ({ setLoadActive }) => {
+const MenuButtons = ({ setLoadActive, resetBoard, flipBoard }) => {
     return (
         <nav className={styles.menuNav}>
 
@@ -21,13 +21,13 @@ const MenuButtons = ({ setLoadActive }) => {
                     Load Game
             </button>
 
-            <button className={styles.navBtn}>Reset Board</button>
+            <button onClick={resetBoard} className={styles.navBtn}>Reset Board</button>
 
             <button className={styles.navBtnIcon} style={{marginLeft: '15px'}}>
                 <FontAwesomeIcon icon={faCog} />
             </button>
 
-            <button className={styles.navBtnIcon}>
+            <button onClick={flipBoard} className={styles.navBtnIcon}>
                 <FontAwesomeIcon icon={faSync} />
             </button>
 

@@ -7,7 +7,7 @@ import Chessboard from "chessboardjsx";
 const Chess = require("chess.js");
 
 
-const Board = ({ onMove, chess, currFen }) => {
+const Board = ({ onMove, chess, currFen, side }) => {
 
     const [history, setHistory] = useState([]); // moves history
 
@@ -17,7 +17,7 @@ const Board = ({ onMove, chess, currFen }) => {
         setFen(currFen);
     }, [currFen])
 
-    const onDrop = ({sourceSquare, targetSquare}) => {
+    const onDrop = ({sourceSquare, targetSquare, side}) => {
         
         let move = chess.move({
             from: sourceSquare,
@@ -45,6 +45,7 @@ const Board = ({ onMove, chess, currFen }) => {
                 onDrop={onDrop}
                 width={850}
                 undo={true}
+                orientation={side}
             />
         </div>
     );

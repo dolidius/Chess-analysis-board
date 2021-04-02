@@ -30,6 +30,8 @@ const Analysis = () => {
     const [analysisPGN, setAnalysisPGN] = useState("");
     const [loadedPGN, setLoadedPGN] = useState("");
 
+    const [orientation, setOrientation] = useState('white');
+
     const [currMove, setCurrMove] = useState({
         moveNum: 0,
         ravNumber: [],
@@ -521,17 +523,31 @@ const Analysis = () => {
         setAnalysisPGN(newAnalysisPGN);
         setFen(fen);
 
-        // console.log(parsed);
-        // console.log(newAnalysisPGN);
+    }
 
-        // // let newCurrMove = {
-        // //     moveNum: currMove.moveNum + 1,
-        // //     ravNumber: currMove.ravNumber,
-        // //     whichRav: currMove.whichRav
-        // // }
+    const backgroundLoadExit = (e, modal) => {
+        if (e.target === modal.current) {
+            setLoadActive(false);
+        }
+    }
 
-        
+    const resetBoard = () => {
+        setAnalysisPGN("");
+        setCurrMove({
+            moveNum: 0,
+            ravNumber: [],
+            whichRav: []
+        });
+        chess.reset();
+        setFen(chess.fen());
+    }
 
+    const flipBoard = () => {
+        if (orientation === 'white') {
+            setOrientation('black');
+        } else {
+            setOrientation('white');
+        }
     }
 
     let moveNumber = 1;
@@ -549,18 +565,22 @@ const Analysis = () => {
                 isActive={isLoadActive}
                 setLoadActive={setLoadActive}
                 loadPGN={loadPGN}
+                backgroundLoadExit={backgroundLoadExit}
             />
 
             <Board
                 onMove={onMove}
                 chess={chess}
                 currFen={fen}
+                side={orientation}
             />
 
             <div className={styles.menu}>
 
                 <MenuButtons
                     setLoadActive={setLoadActive}
+                    resetBoard={resetBoard}
+                    flipBoard={flipBoard}
                 />
 
                 <Stockfish fen={fen} />
@@ -613,8 +633,6 @@ const Analysis = () => {
                                 moveNumberOverall ++;
 
                             }
-
-                            // console.log(move);
 
                             if (!move.piece && move.rav) {
                                 whichRav ++;
