@@ -10,6 +10,7 @@ import Stockfish from '../Stockfish/Stockfish';
 import MenuButtons from '../MenuButtons/MenuButtons';
 import LoadGamePopup from '../LoadGamePopup/LoadGamePopup';
 import SettingsPopup from '../SettingPopup/SettingsPopup';
+import CurrAnalysisPopup from '../CurrAnalysisPopup/CurrAnalysisPopup';
 
 import styles from './Analysis.module.css';
 
@@ -17,8 +18,6 @@ import parser from '@chess-fu/pgn-parser'
 const pgnParser = new parser();
 
 const Chess = require("chess.js");
-
-
 
 const Analysis = () => {
 
@@ -41,6 +40,7 @@ const Analysis = () => {
 
     const [isLoadActive, setLoadActive] = useState(false);
     const [isSettingsActive, setSettingsActive] = useState(false);
+    const [isCurrAnalysisActive, setCurrAnalysisActive] = useState(false);
 
     const [depth, setDepth] = useState(10);
 
@@ -543,6 +543,12 @@ const Analysis = () => {
         }
     }
 
+    const backgroundCurrAnalysisExit = (e, modal) => {
+        if (e.target === modal.current) {
+            setCurrAnalysisActive(false);
+        }
+    }
+
     const resetBoard = () => {
         setAnalysisPGN("");
         setCurrMove({
@@ -590,6 +596,13 @@ const Analysis = () => {
                 setNotation={setNotation}
             />
 
+            <CurrAnalysisPopup
+                isActive={isCurrAnalysisActive}
+                setActive={setCurrAnalysisActive}
+                backgroundCurrAnalysisExit={backgroundCurrAnalysisExit}
+                analysisPGN={analysisPGN}
+            />
+
             <Board
                 onMove={onMove}
                 chess={chess}
@@ -605,6 +618,7 @@ const Analysis = () => {
                     resetBoard={resetBoard}
                     flipBoard={flipBoard}
                     setSettingsActive={setSettingsActive}
+                    setCurrAnalysisActive={setCurrAnalysisActive}
                 />
 
                 <Stockfish

@@ -7,7 +7,7 @@ import Switch from '../Switch/Switch';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faCog, faSync } from "@fortawesome/free-solid-svg-icons";
 
-const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive }) => {
+const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive, setCurrAnalysisActive }) => {
     return (
         <nav className={styles.menuNav}>
 
@@ -33,7 +33,7 @@ const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive }
                 <FontAwesomeIcon icon={faSync} />
             </button>
 
-            <button className={styles.navBtnIcon}>
+            <button onClick={() => setCurrAnalysisActive(true)} className={styles.navBtnIcon}>
                 <FontAwesomeIcon icon={faSave} />
             </button>
 

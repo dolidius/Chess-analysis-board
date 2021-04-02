@@ -33,11 +33,13 @@
     cursor: pointer;
 }
 
-.loadPGN {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.currPGN {
+    font-family: 'Raleway', sans-serif;
+}
+
+.pgnLabel {
+    color: white;
+    font-size: 20px;
 }
 
 .pgnArea {
@@ -46,28 +48,10 @@
     resize: none;
     width: 340px;
     height: 440px;
-    font-family: 'Raleway', sans-serif;
+    font-family: inherit;
     font-size: 20px;
     padding: 20px;
     outline: none;
-}
-
-.pgnLoadBtn {
-    margin-top: 20px;
-    padding: 15px 0;
-    width: 384px;
-    border: none;
-    background-color: #302C30;
-    color: white;
-    font-size: 16px;
-    font-family: 'Raleway', sans-serif;
-    text-transform: uppercase;
-    text-decoration: none;
-    outline: none;
-    border: 1px solid #1E1B1E;
-}
-
-.pgnLoadBtn:hover {
-    cursor: pointer;
-    background-color: #1E1B1E;
+    color: black;
+    cursor: text;
 }
