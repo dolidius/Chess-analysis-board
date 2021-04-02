@@ -9,6 +9,7 @@ import SubAnalysisMove from '../SubAnalysisMove/SubAnalysisMove';
 import Stockfish from '../Stockfish/Stockfish';
 import MenuButtons from '../MenuButtons/MenuButtons';
 import LoadGamePopup from '../LoadGamePopup/LoadGamePopup';
+import SettingsPopup from '../SettingPopup/SettingsPopup';
 
 import styles from './Analysis.module.css';
 
@@ -39,6 +40,9 @@ const Analysis = () => {
     });
 
     const [isLoadActive, setLoadActive] = useState(false);
+    const [isSettingsActive, setSettingsActive] = useState(false);
+
+    const [depth, setDepth] = useState(10);
 
     useEffect(() => {
         //podswietl curr move
@@ -510,7 +514,7 @@ const Analysis = () => {
                 moveNum: 1,
                 ravNumber: [],
                 whichRav: []
-            })
+            });
         } else {
             const headers = parsed[0] ? parsed[0].headers : []; 
             let moves = parsed[0] ? parsed[0].history : [];
@@ -528,6 +532,12 @@ const Analysis = () => {
     const backgroundLoadExit = (e, modal) => {
         if (e.target === modal.current) {
             setLoadActive(false);
+        }
+    }
+
+    const backgroundSettingsExit = (e, modal) => {
+        if (e.target === modal.current) {
+            setSettingsActive(false);
         }
     }
 
@@ -568,6 +578,14 @@ const Analysis = () => {
                 backgroundLoadExit={backgroundLoadExit}
             />
 
+            <SettingsPopup
+                isActive={isSettingsActive}
+                setSettingsActive={setSettingsActive}
+                backgroundSettingsExit={backgroundSettingsExit}
+                depth={depth}
+                setDepth={setDepth}
+            />
+
             <Board
                 onMove={onMove}
                 chess={chess}
@@ -581,9 +599,13 @@ const Analysis = () => {
                     setLoadActive={setLoadActive}
                     resetBoard={resetBoard}
                     flipBoard={flipBoard}
+                    setSettingsActive={setSettingsActive}
                 />
 
-                <Stockfish fen={fen} />
+                <Stockfish
+                    fen={fen}
+                    engineDepth={depth}
+                />
 
                 <div className={styles.history}>
                     {analysisPGN !== '' &&

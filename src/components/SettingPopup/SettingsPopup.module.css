@@ -15,7 +15,7 @@
     align-items: center;
     background-color: #464146;
     width: 30%;
-    height: 75%;
+    height: 65%;
     border-radius: 10px;
     position: relative;
     z-index: 1000;
@@ -29,46 +29,61 @@
     color: white;
 }
 
-.exit:hover {
-    cursor: pointer;
-}
-
-.loadPGN {
+.settingsForm {
+    width: 100%;
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.pgnArea {
-    background-color: #918B91;
-    border: 3px solid #363336;
-    resize: none;
-    width: 340px;
-    height: 440px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 20px;
-    padding: 20px;
-    outline: none;
+.settingsItem {
+    width: 75%;
+    display: flex;
+    margin: 20px 0;
+    align-items: center;
 }
 
+.settingsLabel {
+    width: 50%;
+}
 
-.pgnLoadBtn {
-    margin-top: 20px;
-    padding: 15px 0;
-    width: 384px;
+.settingsInput {
+    width: 50%;
+}
+
+.basicTextInput {
+    padding: 4px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+    font-family: inherit;
+}
+
+.submitSettings {
+    margin-top: 18px;
+}
+
+.submitSettings button {
+    padding: 12px 60px;
     border: none;
     background-color: #302C30;
     color: white;
-    font-size: 16px;
+    font-size: 13px;
     font-family: 'Raleway', sans-serif;
     text-transform: uppercase;
     text-decoration: none;
     outline: none;
     border: 1px solid #1E1B1E;
+    border-radius: 4px;
 }
 
-.pgnLoadBtn:hover {
+.submitSettings button:hover {
     cursor: pointer;
     background-color: #1E1B1E;
 }

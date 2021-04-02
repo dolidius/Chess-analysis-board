@@ -6,9 +6,9 @@ const Chess = require("chess.js");
 
 const stockfish = new Worker("/stockfish.js");
 
-const Stockfish = ({ fen }) => {
+const Stockfish = ({ fen, engineDepth }) => {
 
-    const [depth, setDepth] = useState(10);
+    const [depth, setDepth] = useState(engineDepth);
     const [bestLines, setBestLines] = useState([]); // [0]-best, [1]-second best, [2]-third best
     const [bestMove, setBestMove] = useState("");
 

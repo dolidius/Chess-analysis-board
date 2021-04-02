@@ -2,10 +2,12 @@ import React from "react";
 
 import styles from './MenuButtons.module.css';
 
+import Switch from '../Switch/Switch';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faCog, faSync } from "@fortawesome/free-solid-svg-icons";
 
-const MenuButtons = ({ setLoadActive, resetBoard, flipBoard }) => {
+const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive }) => {
     return (
         <nav className={styles.menuNav}>
 
@@ -23,7 +25,7 @@ const MenuButtons = ({ setLoadActive, resetBoard, flipBoard }) => {
 
             <button onClick={resetBoard} className={styles.navBtn}>Reset Board</button>
 
-            <button className={styles.navBtnIcon} style={{marginLeft: '15px'}}>
+            <button onClick={() => setSettingsActive(true)} className={styles.navBtnIcon} style={{marginLeft: '15px'}}>
                 <FontAwesomeIcon icon={faCog} />
             </button>
 
@@ -37,10 +39,7 @@ const MenuButtons = ({ setLoadActive, resetBoard, flipBoard }) => {
 
             <div style={{ flex: 1 }}></div>
 
-            <label class={styles.switch}>
-                <input type="checkbox" />
-                <span class={styles.slider}></span>
-            </label>
+            <Switch />
 
         </nav>
     );
