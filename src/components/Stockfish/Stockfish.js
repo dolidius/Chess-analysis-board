@@ -13,6 +13,10 @@ const Stockfish = ({ fen, engineDepth }) => {
     const [bestMove, setBestMove] = useState("");
 
     useEffect(() => {
+        setDepth(engineDepth);
+    }, [engineDepth])
+
+    useEffect(() => {
         stockfish.postMessage("uci");
         stockfish.postMessage("ucinewgame");
         stockfish.postMessage("setoption name MultiPV value 3"); // best 3 lines

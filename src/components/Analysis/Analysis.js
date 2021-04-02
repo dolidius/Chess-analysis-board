@@ -44,6 +44,8 @@ const Analysis = () => {
 
     const [depth, setDepth] = useState(10);
 
+    const [notation, setNotation] = useState(true);
+
     useEffect(() => {
         //podswietl curr move
     }, [currMove])
@@ -584,6 +586,8 @@ const Analysis = () => {
                 backgroundSettingsExit={backgroundSettingsExit}
                 depth={depth}
                 setDepth={setDepth}
+                notation={notation}
+                setNotation={setNotation}
             />
 
             <Board
@@ -591,6 +595,7 @@ const Analysis = () => {
                 chess={chess}
                 currFen={fen}
                 side={orientation}
+                notation={notation}
             />
 
             <div className={styles.menu}>

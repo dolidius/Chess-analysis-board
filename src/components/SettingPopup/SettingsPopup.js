@@ -7,16 +7,25 @@ import Switch from '../Switch/Switch';
 
 import styles from './SettingsPopup.module.css';
 
-const SettingsPopup = ({ isActive, setSettingsActive, backgroundSettingsExit, depth, setDepth }) => {
+const SettingsPopup = ({ isActive, setSettingsActive, backgroundSettingsExit, depth, setDepth, notation, setNotation }) => {
 
     const [modal] = useState(createRef());
 
     const [newDepth, setNewDepth] = useState(depth);
 
+    const [showNotation, setShowNotation] = useState(true);
+
     const confirmSettings = (e) => {
         e.preventDefault();
 
-        
+        if (newDepth >= 1 && newDepth <= 30) {
+            setDepth(newDepth);
+        }
+
+        setNotation(showNotation);
+
+        setSettingsActive(false);
+
     }
 
     if (isActive) {
@@ -50,7 +59,10 @@ const SettingsPopup = ({ isActive, setSettingsActive, backgroundSettingsExit, de
                                 <label>Show Notation:</label>
                             </div>
                             <div className={styles.settingsInput}> 
-                                <Switch /> 
+                                <Switch
+                                    checked={notation}
+                                    setCheck={setShowNotation}
+                                /> 
                             </div>
                         </div>
 

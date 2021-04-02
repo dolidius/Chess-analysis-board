@@ -7,7 +7,7 @@ import Chessboard from "chessboardjsx";
 const Chess = require("chess.js");
 
 
-const Board = ({ onMove, chess, currFen, side }) => {
+const Board = ({ onMove, chess, currFen, side, notation }) => {
 
     const [history, setHistory] = useState([]); // moves history
 
@@ -46,6 +46,7 @@ const Board = ({ onMove, chess, currFen, side }) => {
                 width={850}
                 undo={true}
                 orientation={side}
+                showNotation={notation}
             />
         </div>
     );
