@@ -1,0 +1,19 @@
+.bestLines {
+}
+
+.bestLine {
+    width: 100%;
+    display: flex;
+    background-color: rgba(0,0,0,0.5);
+    padding: 3px 0;
+    margin: 9px 0;
+    overflow: hidden; 
+}
+
+.bestMove {
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    margin: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

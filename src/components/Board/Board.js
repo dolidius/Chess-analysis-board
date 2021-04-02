@@ -33,7 +33,7 @@ const Board = ({ onMove, chess, currFen }) => {
 
         setHistory(history);
 
-        onMove(chess.fen(), history);
+        onMove(chess.fen(), move);
 
     }
 

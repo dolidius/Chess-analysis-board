@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import styles from './Stockfish.module.css';
+
 const Chess = require("chess.js");
 
 const stockfish = new Worker("/stockfish.js");
@@ -87,7 +89,7 @@ const Stockfish = ({ fen }) => {
 
             convertedLine.push(convertedMove);
 
-            chess2.move(from+to, { sloppy: true });
+            chess2.move(from + to, { sloppy: true });
 
         }
 
@@ -96,8 +98,16 @@ const Stockfish = ({ fen }) => {
     }
 
     return (
-        <div onClick={() => console.log(bestLines)}>
-            siema
+        <div className={styles.bestLines} onClick={() => console.log(bestLines)}>
+            {bestLines.map(bestLine => (
+                <div className={styles.bestLine}>
+                    {bestLine.map(bestMove => 
+                        <div className={styles.bestMove}>
+                            {bestMove}
+                        </div>    
+                    )}
+                </div>
+            ))}
         </div>
     )
 

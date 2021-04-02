@@ -1,0 +1,47 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    background-color: rgba(0,0,0, 0.8);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 40%;
+    height: 85%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.exit {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 30px;
+}
+
+.exit:hover {
+    cursor: pointer;
+}
+
+.loadPGN {
+    display: flex;
+    flex-direction: column;
+}
+
+.pgnArea {
+    resize: none;
+    width: 500px;
+    height: 500px;
+}
+
+.pgnLoadBtn {
+    
+}
