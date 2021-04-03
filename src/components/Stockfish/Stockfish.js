@@ -74,6 +74,8 @@ const Stockfish = ({ fen, engineDepth }) => {
 
         const convertedLine = [];
 
+        console.log(line);
+
         for (let i = 0; i < line.length; i ++) {
 
             const move = line[i];
@@ -82,13 +84,22 @@ const Stockfish = ({ fen, engineDepth }) => {
             const to = move[2] + move[3];
 
             const piece = chess2.get(from).type;
+            const piece2 = chess2.get(to);
 
             let convertedMove = "";
 
             if (piece === 'p') {
-                convertedMove += to;
+                if (piece2 === null) {
+                    convertedMove += to;
+                } else {
+                    convertedMove += `${move[0]}x${to}`
+                }
             } else {
-                convertedMove += piece.toUpperCase() + to;
+                if (piece2 === null) {
+                    convertedMove += piece.toUpperCase() + to;
+                } else {
+                    convertedMove += `${piece.toUpperCase()}x${to}`
+                }
             }
 
             convertedLine.push(convertedMove);

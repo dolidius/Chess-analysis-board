@@ -245,6 +245,8 @@ const Analysis = () => {
             
             if (moves[i].piece != null) {
 
+                let isActive = false;
+
                 if (numberTimes === 0) {
                     subAn.push(<div>{moveNumber}</div>);
                     add = true;
@@ -260,6 +262,12 @@ const Analysis = () => {
                     add = false;
                 }
 
+                if (currMove.moveNum === moveNumberOverall && 
+                    JSON.stringify(currMove.ravNumber) === JSON.stringify(ravNumber) && 
+                    JSON.stringify(currMove.whichRav) === JSON.stringify(whichRav)) {
+                    isActive = true;
+                }
+
                 subAn.push(
                     <SubAnalysisMove
                         piece={move.piece}
@@ -269,6 +277,7 @@ const Analysis = () => {
                         moveNumberOverall={moveNumberOverall}
                         onSubAnalysisPress={onSubAnalysisPress}
                         whichRav={whichRav}
+                        isActive={isActive}
                     />
                 )
 
@@ -392,8 +401,6 @@ const Analysis = () => {
 
         let moveNumberOverall = 0;
 
-        console.log(moves);
-
         for (let i = 0; i < currMove.ravNumber.length; i ++) {
 
             for (let j = 0; j < moves.length; j ++) {
@@ -412,7 +419,6 @@ const Analysis = () => {
 
         }
 
-        console.log(moves);
         let newCurr = currMove;
 
         for (let i = 0; i < moves.length; i ++) {
@@ -635,6 +641,8 @@ const Analysis = () => {
 
                                 whichRav = 1;
 
+                                let isActive = false;
+
                                 if (numberTimes === 0) {
                                     returnedComp.push(
                                         <div className={styles.moveNum} key={moveNumber}>
@@ -654,6 +662,10 @@ const Analysis = () => {
                                     add = false;
                                 }
 
+                                if (currMove.moveNum === moveNumberOverall && currMove.ravNumber.length === 0) {
+                                    isActive = true;
+                                }
+
                                 returnedComp.push( 
                                     <Move
                                         key={moveNumber + move.piece + move.to}
@@ -662,6 +674,7 @@ const Analysis = () => {
                                         to={move.to}
                                         moveNum={moveNumberOverall}
                                         raw={move.raw}
+                                        isActive={isActive}
                                     />
                                 );
 
