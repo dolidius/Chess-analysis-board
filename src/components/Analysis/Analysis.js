@@ -16,6 +16,7 @@ import EvalBar from '../EvalBar/EvalBar';
 import styles from './Analysis.module.css';
 
 import parser from '@chess-fu/pgn-parser'
+import { parse } from "@fortawesome/fontawesome-svg-core";
 const pgnParser = new parser();
 
 const Chess = require("chess.js");
@@ -54,7 +55,15 @@ const Analysis = () => {
     useEffect(() => {
         chess.header('White', 'unknown')
         chess.header('Black', 'unknown')
-    }, [chess])
+    }, [chess]);
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyDown);
+    
+        return () => {
+          window.removeEventListener("keydown", handleKeyDown);
+        };
+    });
 
     const getEvalFromEngine = evalu => {
         setEvaluation(evalu);
@@ -80,6 +89,109 @@ const Analysis = () => {
             ravNumber: [],
             whichRav: []
         });
+
+    }
+
+    const handleKeyDown = e => {
+
+        if (e.keyCode === 37 || e.keyCode === 39) {
+
+            const parsed = pgnParser.parse(analysisPGN);
+
+            const headers = parsed[0] ? parsed[0].headers : []; 
+            let moves = parsed[0] ? parsed[0].history : [];
+
+            moves = clearParsedMoves(moves);
+
+            const parsedMoves = [];
+
+            for (let i = 0; i < currMove.ravNumber.length; i ++) {
+
+                let moveCounter = 0;
+                
+                for (let j = 0; j < moves.length; j ++) {
+
+                    if (moves[j].piece != null) {
+                        
+                        moveCounter++;
+
+                        if (currMove.ravNumber[i] === moveCounter) {
+                            moves = moves[j + (currMove.whichRav[i] - 1)].rav;
+                            break;
+                        }
+
+                        parsedMoves.push(moves[j].raw);
+
+                    }
+
+                }
+
+            }
+
+            let moveCounter = 0;
+
+            let prevMove = null;
+
+            for (let i = 0; i < moves.length; i ++) {
+
+                if (moves[i].piece != null) {
+
+                    moveCounter ++;
+                    parsedMoves.push(moves[i].raw);
+                    
+                    if (moveCounter === currMove.moveNum) {
+                        
+                        const nextMove = findNextMove(moves, i);
+
+                        if (e.keyCode === 39 && nextMove != null) {
+                            parsedMoves.push(nextMove);
+                            moveCounter ++;
+                            
+                        }
+
+                        if (e.keyCode === 37 && prevMove != null) {
+                            parsedMoves.pop();
+                            moveCounter --;
+                        }
+
+                        break;
+                    }
+
+                    prevMove = moves[i].raw;
+
+                }
+
+            }
+
+            let newPgn = createPGN(headers, parsedMoves);
+
+            if (chess.load_pgn(newPgn)) {
+                setFen(chess.fen());
+                setCurrMove({
+                    moveNum: moveCounter,
+                    ravNumber: currMove.ravNumber,
+                    whichRav: currMove.whichRav
+                });
+                
+            } else {
+                console.log("bugged");
+            }
+
+        }
+
+    }
+
+    const findNextMove = (moves, index) => {
+
+        for (let i = index + 1; i < moves.length; i ++) {
+
+            if (moves[i].piece != null) {
+                return moves[i].raw;
+            }
+
+        }
+
+        return null;
 
     }
 
