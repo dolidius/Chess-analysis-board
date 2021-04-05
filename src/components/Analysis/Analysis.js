@@ -11,6 +11,7 @@ import MenuButtons from '../MenuButtons/MenuButtons';
 import LoadGamePopup from '../LoadGamePopup/LoadGamePopup';
 import SettingsPopup from '../SettingPopup/SettingsPopup';
 import CurrAnalysisPopup from '../CurrAnalysisPopup/CurrAnalysisPopup';
+import EvalBar from '../EvalBar/EvalBar';
 
 import styles from './Analysis.module.css';
 
@@ -46,15 +47,18 @@ const Analysis = () => {
 
     const [notation, setNotation] = useState(true);
 
-    useEffect(() => {
-        //podswietl curr move
-    }, [currMove])
+    const [evalutaion, setEvaluation] = useState("0");
+
+    const [engineStarted, setEngineStarted] = useState(true);
 
     useEffect(() => {
         chess.header('White', 'unknown')
         chess.header('Black', 'unknown')
     }, [chess])
 
+    const getEvalFromEngine = evalu => {
+        setEvaluation(evalu);
+    }
 
     const undoMove = () => {
         chess.undo();
@@ -102,10 +106,6 @@ const Analysis = () => {
 
         return newPgn;
     }
-
-    
-
-    
 
     const moveHistoryPress = (piece, to, moveNum) => {
 
@@ -385,7 +385,6 @@ const Analysis = () => {
     const createPGNWithSub = (headers, moves) => {
 
         let pgn = addHeadersToPGN(headers);
-        console.log(pgn);
 
         let moveNumber = 1;
         let numberTimes = 0;
@@ -510,6 +509,20 @@ const Analysis = () => {
         array.splice(index, 0, element);
     }
 
+    const clearParsedMoves = (moves) => {
+
+        const cleared = [];
+
+        for (let i = 0; i < moves.length; i ++) {
+            if (moves[i].piece != null || moves[i].rav != null) {
+                cleared.push(moves[i]);
+            }
+        }
+
+        return cleared;
+        
+    }
+
     const onMove = (fen, move) => {
 
         const parsed = pgnParser.parse(analysisPGN);
@@ -526,9 +539,11 @@ const Analysis = () => {
         } else {
             const headers = parsed[0] ? parsed[0].headers : []; 
             let moves = parsed[0] ? parsed[0].history : [];
+
+            const cleared = clearParsedMoves(moves);
             
-            const newCurr = addMove(moves, move);
-            newAnalysisPGN = createPGNWithSub(headers, moves);
+            const newCurr = addMove(cleared, move);
+            newAnalysisPGN = createPGNWithSub(headers, cleared);
             setCurrMove(newCurr);
         }
 
@@ -581,7 +596,6 @@ const Analysis = () => {
     let moveNumberOverall = 1;
     let whichRav = 1;
 
-
     return (
         <div className={styles.container}>
 
@@ -609,6 +623,14 @@ const Analysis = () => {
                 analysisPGN={analysisPGN}
             />
 
+            {engineStarted && 
+                <div style={{ height: '850px' }}>
+                    <EvalBar
+                        evaluation={evalutaion}
+                    />
+                </div>
+            }
+
             <Board
                 onMove={onMove}
                 chess={chess}
@@ -625,12 +647,18 @@ const Analysis = () => {
                     flipBoard={flipBoard}
                     setSettingsActive={setSettingsActive}
                     setCurrAnalysisActive={setCurrAnalysisActive}
+                    evaluation={evalutaion}
+                    setEngineStarted={setEngineStarted}
+                    engineStarted={engineStarted}
                 />
 
-                <Stockfish
-                    fen={fen}
-                    engineDepth={depth}
-                />
+                {engineStarted && 
+                    <Stockfish
+                        fen={fen}
+                        engineDepth={depth}
+                        sendEval={getEvalFromEngine}
+                    />
+                }
 
                 <div className={styles.history}>
                     {analysisPGN !== '' &&

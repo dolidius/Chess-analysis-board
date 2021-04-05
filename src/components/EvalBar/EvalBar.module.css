@@ -1,0 +1,35 @@
+.bar {
+    height: 100%;
+    width: 50px;
+    font-family: 'Raleway', sans-serif;
+    border: 2px solid #381E48;
+    font-weight: bold;
+}
+
+.barBlack {
+    width: 100%;
+    background-color: black;
+    color: white;
+    transition: height 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.barBlack span {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.barWhite {
+    width: 100%;
+    background-color: white;
+    color: black;
+    transition: height 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.barWhite span {
+    margin-bottom: 10px;
+    text-align: center;
+}

@@ -7,13 +7,15 @@ import Switch from '../Switch/Switch';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faCog, faSync } from "@fortawesome/free-solid-svg-icons";
 
-const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive, setCurrAnalysisActive }) => {
+const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive, setCurrAnalysisActive, evaluation, setEngineStarted, engineStarted }) => {
     return (
         <nav className={styles.menuNav}>
-
-            <div className={styles.evaluationNum}>
-                +0.1
-            </div>
+            
+            {engineStarted && 
+                <div className={styles.evaluationNum}>
+                    {parseFloat(evaluation) / 100}
+                </div>
+            }
 
             <button 
                 className={styles.navBtn} 
@@ -39,7 +41,10 @@ const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive, 
 
             <div style={{ flex: 1 }}></div>
 
-            <Switch />
+            <Switch
+                checked={engineStarted}
+                setCheck={setEngineStarted}
+            />
 
         </nav>
     );

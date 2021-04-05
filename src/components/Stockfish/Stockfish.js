@@ -4,32 +4,52 @@ import styles from './Stockfish.module.css';
 
 const Chess = require("chess.js");
 
-const stockfish = new Worker("/stockfish.js");
+let stockfish = new Worker("/stockfish.js");
 
-const Stockfish = ({ fen, engineDepth }) => {
+const Stockfish = ({ fen, engineDepth, sendEval }) => {
 
     const [depth, setDepth] = useState(engineDepth);
     const [bestLines, setBestLines] = useState([]); // [0]-best, [1]-second best, [2]-third best
     const [bestMove, setBestMove] = useState("");
+    const [currEval, setCurrEval] = useState("0");
 
     useEffect(() => {
         setDepth(engineDepth);
     }, [engineDepth])
 
-    useEffect(() => {
-        stockfish.postMessage("uci");
-        stockfish.postMessage("ucinewgame");
-        stockfish.postMessage("setoption name MultiPV value 3"); // best 3 lines
-    }, []);
+    const convertEvaluation = (ev) => {
+        // console.log(ev);
+        const chess = new Chess(`${fen}`);
+
+        const turn = chess.turn();
+
+        if (turn === 'b') {
+            if (ev.startsWith('-')) {
+                ev = ev.substring(1);
+            } else {
+                ev = `-${ev}`;
+            }
+        }
+
+        return ev;
+    }
 
     useEffect(() => {
+        sendEval(currEval);
+    }, [currEval]);
+
+    useEffect(() => {
+        stockfish.terminate();
         
-        stockfish.postMessage("position fen " + fen);
+        stockfish = new Worker("/stockfish.js");
+        stockfish.postMessage("uci");
+        stockfish.postMessage("ucinewgame");
+        stockfish.postMessage("setoption name MultiPV value 3");
+        stockfish.postMessage(`position fen ${fen}`);
         stockfish.postMessage(`go depth ${depth}`);
-        // console.log("!NEW MESSAGE!")
         stockfish.onmessage = function(event) {
             // console.log(event.data ? event.data: event);
-            if (event.data.startsWith(`info depth ${depth}`)) {
+            if (event.data.startsWith(`info depth`)) {
                 let message = event.data.split(' ');
 
                 let index = 0;
@@ -37,10 +57,18 @@ const Stockfish = ({ fen, engineDepth }) => {
 
                 let moves = [];
 
+                let evalutaion = "0";
+
                 for (let i = 0; i < message.length; i ++) {
                     if (message[i] === 'multipv') {
                         index = parseInt(message[i + 1]) - 1;
                     }
+
+                    if (message[i] === 'score' && index === 0) {
+                        evalutaion = message[i + 2];
+                        setCurrEval(convertEvaluation(evalutaion));
+                    }
+
 
                     if (message[i] === 'pv') {
                         movesIndex = i + 1;
@@ -57,7 +85,6 @@ const Stockfish = ({ fen, engineDepth }) => {
                 const bestLinesCopy = bestLines;
                 bestLinesCopy[index] = convertStockfishLine(moves);
                 setBestLines(bestLinesCopy);
-
             }
 
             if (event.data.startsWith("bestmove")) {
@@ -66,7 +93,7 @@ const Stockfish = ({ fen, engineDepth }) => {
             }
         };
 
-    }, [fen]);
+    }, [fen, depth]);
 
     const convertStockfishLine = line => {
         
@@ -74,14 +101,16 @@ const Stockfish = ({ fen, engineDepth }) => {
 
         const convertedLine = [];
 
-        console.log(line);
-
         for (let i = 0; i < line.length; i ++) {
 
             const move = line[i];
 
             const from = move[0] + move[1];
             const to = move[2] + move[3];
+
+            if (chess2.get(from) === null) {
+                break;
+            }
 
             const piece = chess2.get(from).type;
             const piece2 = chess2.get(to);
@@ -113,7 +142,7 @@ const Stockfish = ({ fen, engineDepth }) => {
     }
 
     return (
-        <div className={styles.bestLines} onClick={() => console.log(bestLines)}>
+        <div className={styles.bestLines}>
             {bestLines.map(bestLine => (
                 <div className={styles.bestLine}>
                     {bestLine.map(bestMove => 
