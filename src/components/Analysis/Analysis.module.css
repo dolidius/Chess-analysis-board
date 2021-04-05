@@ -18,13 +18,31 @@
 
 .history {
     /* margin-left: 10px; */
+    max-height: 76.3%;
     display: flex;
     flex-wrap:wrap;
-    /* height: 90%; */
     color: white;
     font-size: 19px;
     font-family: 'Raleway', sans-serif;
+    overflow-y:scroll;
 }
+
+.history::-webkit-scrollbar {
+    width: 0px;
+}
+  
+/* .history::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+  
+.history::-webkit-scrollbar-thumb {
+    background: #888;
+}
+  
+.history::-webkit-scrollbar-thumb:hover {
+    background: #555;
+} */
 
 .moveNum {
     color: #918D8D;
