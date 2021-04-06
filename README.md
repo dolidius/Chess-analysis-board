@@ -2,7 +2,7 @@
 
 Chess game analysis is a platform that allow users to analyse their chess game. You can import your game, check the evaluation of the position or check the best move provided by the chess enginge stockfish.
 
-[Live](https://eloquent-goodall-82cf88.netlify.app/)\
+[Live](https://eloquent-goodall-82cf88.netlify.app/)
 
 ![Analysis board](https://i.imgur.com/aKLMNIf.png)
 
@@ -10,7 +10,7 @@ Created using:
 -[React.js](https://reactjs.org/)\
 -[Chessboard.jsx](https://chessboardjsx.com/)\
 -[Chess.js](https://github.com/jhlywa/chess.js)\
--[Stockfish](https://stockfishchess.org/)\
+-[Stockfish](https://stockfishchess.org/)
 
 ### Installation
 
