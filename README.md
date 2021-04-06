@@ -1,6 +1,6 @@
 # Chess analysis board
 
-Chess game analysis is platform that allow user to analyse their chess game. You can import your game, check the evaluation of the position or check the best move provided by the chess enginge stockfish.
+Chess game analysis is a platform that allow users to analyse their chess game. You can import your game, check the evaluation of the position or check the best move provided by the chess enginge stockfish.
 
 ![Analysis board](https://i.imgur.com/aKLMNIf.png)
 
@@ -30,5 +30,5 @@ $ npm start
 The application will be running with on port 3000.
 
 ### TO-DO List
--Report about the game
+-Report about the game\
 -Custom board styles
