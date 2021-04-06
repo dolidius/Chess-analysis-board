@@ -5,9 +5,10 @@ Chess game analysis is a platform that allow users to analyse their chess game. 
 ![Analysis board](https://i.imgur.com/aKLMNIf.png)
 
 Created using:
--[Chessboard.jsx](https://chessboardjsx.com/)
--[Chess.js](https://github.com/jhlywa/chess.js)
--[Stockfish](https://stockfishchess.org/)
+-[React.js](https://reactjs.org/)\
+-[Chessboard.jsx](https://chessboardjsx.com/)\
+-[Chess.js](https://github.com/jhlywa/chess.js)\
+-[Stockfish](https://stockfishchess.org/)\
 
 ### Installation
 
