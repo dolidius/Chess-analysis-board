@@ -701,6 +701,10 @@ const Analysis = () => {
         }
     }
 
+    const getCurrPlayer = () => {
+        return chess.turn();
+    }
+
     let moveNumber = 1;
     let numberTimes = 0;
     let add = false;
@@ -739,6 +743,7 @@ const Analysis = () => {
                 <div style={{ height: '850px' }}>
                     <EvalBar
                         evaluation={evalutaion}
+                        getCurrPlayer={getCurrPlayer}
                     />
                 </div>
             }

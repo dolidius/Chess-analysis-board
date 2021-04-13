@@ -8,12 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faCog, faSync } from "@fortawesome/free-solid-svg-icons";
 
 const MenuButtons = ({ setLoadActive, resetBoard, flipBoard, setSettingsActive, setCurrAnalysisActive, evaluation, setEngineStarted, engineStarted }) => {
+    console.log(evaluation);
     return (
         <nav className={styles.menuNav}>
             
             {engineStarted && 
                 <div className={styles.evaluationNum}>
-                    {parseFloat(evaluation) / 100}
+                    {evaluation[0] === 'M' ? (evaluation[1] === '-' ? evaluation.slice(0, 1) + evaluation.slice(2) : evaluation) : parseFloat(evaluation) / 100}
                 </div>
             }
 

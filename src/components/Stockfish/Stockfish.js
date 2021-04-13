@@ -23,7 +23,8 @@ const Stockfish = ({ fen, engineDepth, sendEval }) => {
 
         const turn = chess.turn();
 
-        if (turn === 'b') {
+        if (turn === 'b' && !ev.startsWith('M')) {
+
             if (ev.startsWith('-')) {
                 ev = ev.substring(1);
             } else {
@@ -64,9 +65,16 @@ const Stockfish = ({ fen, engineDepth, sendEval }) => {
                         index = parseInt(message[i + 1]) - 1;
                     }
 
-                    if (message[i] === 'score' && index === 0) {
+                    if (message[i] === 'score' && message[i + 1] === 'cp' && index === 0) {
                         evalutaion = message[i + 2];
                         setCurrEval(convertEvaluation(evalutaion));
+                        console.log(evalutaion);
+                    }
+
+                    else if (message[i] === 'score' && index === 0) {
+                        evalutaion = 'M' + message[i + 2];
+                        setCurrEval(convertEvaluation(evalutaion));
+                        console.log(evalutaion);
                     }
 
 
